@@ -14,12 +14,11 @@ class RemoteAuthentication {
   Future<void> auth(AuthenthicationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
-      await httpClient.request(
-          url: url,
-          method: 'post',
-          body:body);
-    }on HttpError {
-      throw DomainError.unexpected;
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError catch (error) {
+      throw error == HttpError.unauthorized
+          ? DomainError.invalidCredentials
+          : DomainError.unexpected;
     }
   }
 }
@@ -33,8 +32,7 @@ class RemoteAuthenticationParams {
     required this.password,
   });
 
-  factory RemoteAuthenticationParams.fromDomain(
-          AuthenthicationParams params) =>
+  factory RemoteAuthenticationParams.fromDomain(AuthenthicationParams params) =>
       RemoteAuthenticationParams(email: params.email, password: params.secret);
 
   Map toJson() => {'email': email, 'password': password};
