@@ -1,16 +1,15 @@
-# curso_manguinho
+# Seção 1
 
-br.com.manguinho
+## Comandos git
+git config --global --edit
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Configuração git
+[alias]
+c = !git add --all && git commit -m
+s = !git status -s
+l = !git log --pretty=format:'%C(blue)%h%C(red)%d %C(white)%s - %C(cyan)%cn, %C(green)%cr'
+t = !sh -c 'git tag -a $1 -m $1' -
+amend = !git add --all && git commit --amend --no-edit
+count = !git shortlog -s --grep
+[push]
+followTags = true
