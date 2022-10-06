@@ -27,3 +27,9 @@ followTags = true
 ![alt text](./docs/secao2_topicos.png "Seção 2 - Tópicos")
 
 ![alt text](./docs/secao2.png "Seção 2 - Diagrama")
+
+# Seção 3
+
+![alt text](./docs/secao3_topicos.png "Seção 3 - Tópicos")
+
+![alt text](./docs/secao3.png "Seção 3 - Cenários")
