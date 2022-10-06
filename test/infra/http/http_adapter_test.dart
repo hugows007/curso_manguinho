@@ -12,22 +12,38 @@ class HttpAdapter {
     required String url,
     required String method,
   }) async {
-    await client.post(Uri.parse(url));
+    final headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json',
+    };
+    await client.post(Uri.parse(url), headers: headers);
   }
 }
 
 class ClientSpy extends Mock implements Client {}
 
 void main() {
+  late HttpAdapter sut;
+  late ClientSpy client;
+  late Uri uri;
+
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    uri = Uri.parse(faker.internet.httpUrl());
+  });
+
   group('post', () {
     test('Should call post with correct values', () async {
-      final client = ClientSpy();
-      final sut = HttpAdapter(client);
-      final url = Uri.parse(faker.internet.httpUrl());
+      await sut.request(url: uri.path, method: 'post');
 
-      await sut.request(url: url.path, method: 'post');
-
-      verify(() => client.post(url));
+      verify(() => client.post(
+            uri,
+            headers: {
+              'content-type': 'application/json',
+              'accept': 'application/json',
+            },
+          ));
     });
   });
 }
