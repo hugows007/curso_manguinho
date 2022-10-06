@@ -12,7 +12,7 @@ class HttpClientSpy extends Mock implements HttpClient {}
 void main() {
   late RemoteAuthentication sut;
   late HttpClientSpy httpClient;
-  late String url;
+  late Uri uri;
   late AuthenthicationParams params;
 
   Map mockValidData() => {
@@ -21,7 +21,7 @@ void main() {
       };
 
   When mockRequest() => when(() => httpClient.request(
-      url: any(named: 'url'),
+      uri: any(named: 'uri'),
       method: any(named: 'method'),
       body: captureAny(named: 'body')));
 
@@ -34,9 +34,10 @@ void main() {
   }
 
   setUp(() {
+    registerFallbackValue(Uri());
     httpClient = HttpClientSpy();
-    url = faker.internet.httpUrl();
-    sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    uri = Uri.parse(faker.internet.httpUrl());
+    sut = RemoteAuthentication(httpClient: httpClient, url: uri);
 
     params = AuthenthicationParams(
         email: faker.internet.email(), secret: faker.internet.password());
@@ -48,7 +49,7 @@ void main() {
     await sut.auth(params);
 
     verify(() => httpClient.request(
-          url: url,
+          uri: uri,
           method: 'post',
           body: {
             'email': params.email,
