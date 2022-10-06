@@ -1,3 +1,4 @@
+import 'package:curso_manguinho/data/http/http.dart';
 import 'package:curso_manguinho/infra/http/http.dart';
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
@@ -80,6 +81,22 @@ void main() {
       final response = await sut.request(uri: uri, method: 'post');
 
       expect(response, null);
+    });
+
+    test('Should return BadRequestError if post returns 400', () async {
+      mockResponse(400, body: '');
+
+      final future = sut.request(uri: uri, method: 'post');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Should return BadRequestError if post returns 400', () async {
+      mockResponse(400);
+
+      final future = sut.request(uri: uri, method: 'post');
+
+      expect(future, throwsA(HttpError.badRequest));
     });
   });
 }
