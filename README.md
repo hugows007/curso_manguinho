@@ -1,3 +1,7 @@
+# Clean Architecture 
+
+![alt text](./docs/clean.png "Clean Architecture")
+
 # Seção 1
 
 ## Comandos git
