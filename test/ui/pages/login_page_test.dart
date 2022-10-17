@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:curso_manguinho/ui/pages/pages.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +10,24 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
   LoginPresenter? presenter;
+  late StreamController<String> emailErrorController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
+    emailErrorController = StreamController<String>();
+    when(() => presenter!.emailErrorStream).thenAnswer((
+        invocation) => emailErrorController.stream);
+
     var loginPage = MaterialApp(
         home: LoginPage(
-      presenter: presenter,
-    ));
+          presenter: presenter,
+        ));
     await tester.pumpWidget(loginPage);
   }
+
+  tearDown(() {
+    emailErrorController.close();
+  });
 
   testWidgets('Should load with correct initial state', (tester) async {
     await loadPage(tester);
@@ -30,7 +41,7 @@ void main() {
       emailTextChildren,
       findsOneWidget,
       reason:
-          'when a TextFormFile has only one text child, means it has no errors, since one of the childs is always the label text',
+      'when a TextFormFile has only one text child, means it has no errors, since one of the childs is always the label text',
     );
 
     final passwordTextChildren = find.descendant(
@@ -42,7 +53,7 @@ void main() {
       passwordTextChildren,
       findsOneWidget,
       reason:
-          'when a TextFormFile has only one text child, means it has no errors, since one of the childs is always the label text',
+      'when a TextFormFile has only one text child, means it has no errors, since one of the childs is always the label text',
     );
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
@@ -62,5 +73,14 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
 
     verify(() => presenter!.validatePassword(password));
+  });
+
+  testWidgets('Should present erro if email is invalid', (tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add('any error');
+    await tester.pump();
+
+    expect(find.text('any error'), findsOneWidget);
   });
 }
