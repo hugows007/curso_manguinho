@@ -14,6 +14,7 @@ void main() {
   late StreamController<String> passwordErrorController;
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
+  late StreamController<String> mainErrorController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
@@ -21,6 +22,7 @@ void main() {
     passwordErrorController = StreamController<String>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
+    mainErrorController = StreamController<String>();
 
     when(() => presenter!.emailErrorStream)
         .thenAnswer((invocation) => emailErrorController.stream);
@@ -34,6 +36,9 @@ void main() {
     when(() => presenter!.isLoadingStream)
         .thenAnswer((invocation) => isLoadingController.stream);
 
+    when(() => presenter!.mainErrorStream)
+        .thenAnswer((invocation) => mainErrorController.stream);
+
     var loginPage = MaterialApp(
         home: LoginPage(
       presenter: presenter,
@@ -46,6 +51,7 @@ void main() {
     passwordErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+    mainErrorController.close();
   });
 
   testWidgets('Should load with correct initial state', (tester) async {
@@ -218,5 +224,14 @@ void main() {
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should present error message if authentication fails', (tester) async {
+    await loadPage(tester);
+
+    mainErrorController.add('main error');
+    await tester.pump();
+
+    expect(find.text('main error'), findsOneWidget);
   });
 }

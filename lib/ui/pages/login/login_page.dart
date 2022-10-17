@@ -41,10 +41,24 @@ class LoginPage extends StatelessWidget {
                   );
                 },
               );
-            }else{
-              if(Navigator.canPop(context)){
+            } else {
+              if (Navigator.canPop(context)) {
                 Navigator.of(context).pop();
               }
+            }
+          });
+
+          presenter!.mainErrorStream.listen((error) {
+            if (error.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    error,
+                    textAlign: TextAlign.center,
+                  ),
+                  backgroundColor: Colors.red[900],
+                ),
+              );
             }
           });
 
