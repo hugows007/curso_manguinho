@@ -42,4 +42,6 @@ followTags = true
 
 ![alt text](./docs/secao4_topicos.png "Seção 4 - Tópicos")
 
+![alt text](./docs/secao4_arc.png "Seção 4 - Diagrama")
+
 ![alt text](./docs/secao4.png "Seção 4 - Cenários")
