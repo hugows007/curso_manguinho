@@ -52,3 +52,9 @@ followTags = true
 
 ![alt text](./docs/secao5.png "Seção 5 - Cenários")
 
+# Seção 5
+
+![alt text](./docs/secao6_topicos.png "Seção 6 - Tópicos")
+
+![alt text](./docs/secao6.png "Seção 6 - Diagrama")
+
