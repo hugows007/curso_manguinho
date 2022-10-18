@@ -8,7 +8,7 @@ abstract class Validation {
   String? validate({required String field, required String value});
 }
 
-class LoginState{
+class LoginState {
   String? emailError;
 }
 
@@ -18,7 +18,8 @@ class StreamLoginPresenter {
   final _controller = StreamController<LoginState>.broadcast();
   var _state = LoginState();
 
-  Stream<String?> get emailErrorStream => _controller.stream.map((state) => state.emailError);
+  Stream<String?> get emailErrorStream =>
+      _controller.stream.map((state) => state.emailError);
 
   StreamLoginPresenter({required this.validation});
 
@@ -35,10 +36,18 @@ void main() {
   late String email;
   late ValidationSpy validation;
 
+  When mockValidationCall(String? field) => when(() => validation.validate(
+      field: field ?? any(named: 'field'), value: any(named: 'value')));
+
+  void mockValidation({String? field, String? value}) {
+    mockValidationCall(field).thenReturn(value);
+  }
+
   setUp(() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    mockValidation();
   });
 
   test('Should call Validation with correct email', () {
@@ -48,8 +57,7 @@ void main() {
   });
 
   test('Should emit email error if validation fails', () {
-    when(() => validation.validate(field: any(named: 'field'), value: any(named: 'value')))
-        .thenAnswer((_) => 'error');
+    mockValidation(value: 'error');
 
     expectLater(sut.emailErrorStream, emits('error'));
 
