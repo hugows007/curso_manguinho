@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:curso_manguinho/domain/entities/entities.dart';
 import 'package:curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:curso_manguinho/domain/usecases/usecases.dart';
@@ -64,18 +62,18 @@ void main() {
     mockValidation(value: 'error');
 
     sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
+        ?.listen(expectAsync1((error) => expect(error, 'error')));
     sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        ?.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
   });
 
   test('Should emit email null if validation succeeds', () {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.emailErrorStream?.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        ?.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
@@ -92,9 +90,9 @@ void main() {
     mockValidation(value: 'error');
 
     sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
+        ?.listen(expectAsync1((error) => expect(error, 'error')));
     sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        ?.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(password);
     sut.validatePassword(password);
@@ -102,9 +100,9 @@ void main() {
 
   test('Should emit password null if validation succeeds', () {
     sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, null)));
+        ?.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        ?.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(email);
     sut.validatePassword(password);
@@ -114,20 +112,20 @@ void main() {
     mockValidation(field: 'email', value: 'error');
 
     sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
+        ?.listen(expectAsync1((error) => expect(error, 'error')));
     sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, null)));
+        ?.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        ?.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validatePassword(password);
   });
 
   test('Should emit email and password null if validation succeeds', () async {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.emailErrorStream?.listen(expectAsync1((error) => expect(error, null)));
     sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, null)));
+        ?.listen(expectAsync1((error) => expect(error, null)));
 
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
@@ -163,7 +161,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emits(false));
 
-    sut.mainErrorStream.listen(expectAsync1(
+    sut.mainErrorStream?.listen(expectAsync1(
         (error) => expect(error, DomainError.invalidCredentials.description)));
 
     await sut.auth();
@@ -177,9 +175,16 @@ void main() {
 
     expectLater(sut.isLoadingStream, emits(false));
 
-    sut.mainErrorStream.listen(expectAsync1(
-            (error) => expect(error, DomainError.unexpected.description)));
+    sut.mainErrorStream?.listen(expectAsync1(
+        (error) => expect(error, DomainError.unexpected.description)));
 
     await sut.auth();
+  });
+
+  test('Should not emit after dispose', () async {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
   });
 }
