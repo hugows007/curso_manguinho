@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:curso_manguinho/presenstation/presenters/presenters.dart';
-import 'package:curso_manguinho/presenstation/protocols/validation.dart';
+import 'package:curso_manguinho/presentation/presenters/presenters.dart';
+import 'package:curso_manguinho/presentation/protocols/validation.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
