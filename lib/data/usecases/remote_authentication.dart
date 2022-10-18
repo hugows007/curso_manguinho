@@ -13,7 +13,8 @@ class RemoteAuthentication implements Authentication {
     required this.url,
   });
 
-  Future<AccountEntity> auth(AuthenthicationParams params) async {
+  @override
+  Future<AccountEntity> auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
       final httpResponse =
@@ -36,7 +37,7 @@ class RemoteAuthenticationParams {
     required this.password,
   });
 
-  factory RemoteAuthenticationParams.fromDomain(AuthenthicationParams params) =>
+  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) =>
       RemoteAuthenticationParams(email: params.email, password: params.secret);
 
   Map toJson() => {'email': email, 'password': password};
